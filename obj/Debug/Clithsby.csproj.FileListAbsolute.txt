@@ -4,3 +4,9 @@ c:\users\dan dcc\documents\visual studio 2015\Projects\Clithsby\bin\Debug\Cliths
 c:\users\dan dcc\documents\visual studio 2015\Projects\Clithsby\obj\Debug\Clithsby.csprojResolveAssemblyReference.cache
 c:\users\dan dcc\documents\visual studio 2015\Projects\Clithsby\obj\Debug\Clithsby.exe
 c:\users\dan dcc\documents\visual studio 2015\Projects\Clithsby\obj\Debug\Clithsby.pdb
+C:\Users\dan.f\Desktop\clithsby\bin\Debug\Clithsby.exe.config
+C:\Users\dan.f\Desktop\clithsby\obj\Debug\Clithsby.exe
+C:\Users\dan.f\Desktop\clithsby\obj\Debug\Clithsby.pdb
+C:\Users\dan.f\Desktop\clithsby\bin\Debug\Clithsby.exe
+C:\Users\dan.f\Desktop\clithsby\bin\Debug\Clithsby.pdb
+C:\Users\dan.f\Desktop\clithsby\obj\Debug\Clithsby.csprojResolveAssemblyReference.cache

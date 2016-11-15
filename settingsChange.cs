@@ -9,9 +9,11 @@ namespace Clithsby
 {
     public class settingsChange
     {
-        string colors = "C:\\Users\\Dan DCC\\color.csv";
+        string userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\clithsbyData\\";
+        
         public void colorChange(string colorSelection, string fg, string bg)
         {
+            string colors = userDirectory + "color.csv";
             string[] colorOptions = { "black", "blue", "cyan", "dark blue", "dark cyan", "dark gray", "dark green", "dark magenta", "dark red", "dark yellow", "gray", "green", "magenta", "red", "white", "yellow" };
             bool fgOK = false;
             bool bgOK = false;
@@ -93,6 +95,7 @@ namespace Clithsby
         }
         public void ColorUpdate(string colorSelection)
         {
+            string colors = userDirectory + "color.csv";
             StreamWriter updateSettings = new StreamWriter(colors);
             updateSettings.WriteLine(colorSelection);
             updateSettings.Close();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.IO;
@@ -12,17 +13,23 @@ namespace Clithsby
         string projectList = "";
         char projSeperator = ',';
         char dataSeperator = '|';
-        string baseDirectory = "C:\\Users\\Dan DCC\\Documents\\Visual Studio 2015\\Projects\\";
-        string csvfile = "C:\\Users\\Dan DCC\\ProjectPackage.csv";
+        string oscarDirectory = @"\\oscar\_Web\_Genesis";
+        string vs2015Directory = @"\\oscar\_Web\_VS2015";
+        string userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\clithsbyData\\";
+        
         public List<filePack> listAll()
         {
             List<filePack> fileList = new List<filePack>();
-            List<string> possibleProjects = Directory.GetDirectories(baseDirectory).ToList();
+            List<string> possibleProjects = new List<string>();
+            possibleProjects.AddRange(Directory.GetDirectories(vs2015Directory).ToList());
+            possibleProjects.AddRange(Directory.GetDirectories(oscarDirectory).ToList());
             int itemIndex = 0;
+            Console.Write("Please give me the first letter of the project you are looking for: ");
+            char charHint = Console.ReadLine().ToLower().ToCharArray()[0];
             Console.WriteLine("Projects: ");
             foreach (var item in possibleProjects)
             {
-                filePack newProject = findProject(item);
+                filePack newProject = findProject(item, charHint);
                 if(newProject != null)
                 {
                     fileList.Add(newProject);
@@ -32,30 +39,35 @@ namespace Clithsby
             }
             return fileList;
         }
-        public filePack findProject(string filePath)
+        public filePack findProject(string filePath, char charHint)
         {
             string fileX = "";
             filePack nextProjectFile = new filePack();
             fileX = filePath.Split('\\').Last();
+            char CompareChar = fileX.ToLower().ToCharArray()[0];
             List<string> possibleFiles = Directory.GetFiles(filePath).ToList();
-            if(possibleFiles.Count() > 0)
+            if (CompareChar == charHint)
             {
-                foreach (var file in possibleFiles)
+                if (possibleFiles.Count() > 0)
                 {
-                    string _thisFile = file.Split('\\').Last();
-                    string fileType = _thisFile.Split('.').Last();
-                    if (fileType == "sln")
+                    foreach (var file in possibleFiles)
                     {
-                        nextProjectFile.fileName = _thisFile.Split().First();
-                        nextProjectFile.filePath = file;
-                        return nextProjectFile;
+                        string _thisFile = file.Split('\\').Last();
+                        string fileType = _thisFile.Split('.').Last();
+                        char[] letterTest = _thisFile.ToCharArray();
+                        if (fileType == "sln")
+                        {
+                            nextProjectFile.fileName = _thisFile.Split().First();
+                            nextProjectFile.filePath = file;
+                            return nextProjectFile;
+                        }
                     }
                 }
             }
             string nextDirectory = filePath + "\\" + fileX;
             if (Directory.Exists(nextDirectory))
             {
-                return findProject(nextDirectory);
+                return findProject(nextDirectory, charHint);
             }
             else
             {
@@ -64,11 +76,11 @@ namespace Clithsby
         }
         public void launchProject(List<filePack> files)
         {
-            Console.Write("\n\r\'Start\' or \'Add\':");
+            Console.Write("\n\r\'Start\' or \'Add\': ");
             string action = Console.ReadLine().ToLower();
             if(action == "add" || action == "start")
             {
-                Console.WriteLine("\n\rPlease enter index of desired project.");
+                Console.Write("\n\rPlease enter index of desired project: ");
                 int indexNum;
                 bool result = int.TryParse(Console.ReadLine(), out indexNum);
                 if (result == true && indexNum < files.Count())
@@ -79,9 +91,20 @@ namespace Clithsby
                     }
                     else if (action == "start")
                     {
-                        Console.Write("\n\r" + files[indexNum].fileName + " is now being launched.");
-                        Thread.Sleep(1500);
-                        System.Diagnostics.Process.Start(files[indexNum].filePath);
+                        string filePath = files[indexNum].filePath;
+                        string vsVersion = filePath.Split('\\')[4].ToLower();
+                        if (vsVersion == "_vs2015")
+                        {
+                            Console.Write("\n\r" + files[indexNum].fileName + " is now being launched.");
+                            Thread.Sleep(1500);
+                            Process.Start("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", filePath);
+                        }
+                        else if (vsVersion == "_genesis")
+                        {
+                            Console.Write("\n\r" + files[indexNum].fileName + " is now being launched.");
+                            Thread.Sleep(1500);
+                            Process.Start("C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\devenv.exe", filePath);
+                        }
                     }
 
                 }
@@ -105,6 +128,7 @@ namespace Clithsby
             {
                 return;
             }
+            string csvfile = userDirectory + "projectPackage.csv";
             List<filePack> fileList = new List<filePack>();
             bool fileExists = false;
             string fName = projPath.Split('\\').Last().Split('.').First();
@@ -186,6 +210,7 @@ namespace Clithsby
         }
         public void launchProj(){
             Console.WriteLine();
+            string csvfile = userDirectory + "projectPackage.csv";
             using (StreamReader findProjects = new StreamReader(csvfile))
             {
                 projectList = findProjects.ReadLine();
@@ -205,9 +230,20 @@ namespace Clithsby
                 {
                     if (item.Split(')')[0] == fileChoice)
                     {
-                        Console.Write("\n\r" + item.Split(dataSeperator)[0].Split(')')[1] + " is now being launched.");
-                        Thread.Sleep(1500);
-                        System.Diagnostics.Process.Start(item.Split(dataSeperator).Last());
+                        string filePath = item.Split(dataSeperator).Last();
+                        string vsVersion = filePath.Split('\\')[4].ToLower();
+                        if (vsVersion == "_vs2015")
+                        {
+                            Console.Write("\n\r" + item.Split(dataSeperator)[0].Split(')')[1] + " is now being launched.");
+                            Thread.Sleep(1500);
+                            Process.Start("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", filePath);
+                        }
+                        else if (vsVersion == "_genesis")
+                        {
+                            Console.Write("\n\r" + item.Split(dataSeperator)[0].Split(')')[1] + " is now being launched.");
+                            Thread.Sleep(1500);
+                            Process.Start("C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\Common7\\IDE\\devenv.exe", filePath);
+                        }                        
                     }
                 }
             }

@@ -12,7 +12,8 @@ namespace Clithsby
         static void Main(string[] args)
         {
             mainMenu launch = new mainMenu();
-            launch.colorSwitch();            
+            launch.directoryCheck();
+            launch.colorSwitch();         
             launch.introMenu();
         }
     }
