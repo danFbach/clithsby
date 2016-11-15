@@ -17,10 +17,8 @@ namespace Clithsby
             "\n\r>>>>>>>>>>>>>>>>> Clithsby <<<<<<<<<<<<<<<<< \n\r\n\r" +
                 "0 | Your Projects \n\r" +
                 "       0.0 |   List your Current Projects to Launch \n\r" +
-                "       0.1 |   Add a new Visual Project To Your List \n\r \n\r" +
-
-                "1 | All Projects \n\r" +
-                "       1.0 |   List All Projects \n\r\n\r" +
+                "       0.1 |   Add a new Visual Project To Your List \n\r" +
+                "       0.2 |   List All Projects to add or launch. \n\r\n\r" +
 
                 "3 | Launch \n\r" +
                 "       3.0 | Add new Software \n\r" +
@@ -54,12 +52,12 @@ namespace Clithsby
                     break;
                 case "0.2":
                     loadAni();
+                    List<filePack> projectList = manager.listAll();
+                    manager.launchProject(projectList);
                     introMenu();
                     break;
                 case "1.0":
                     loadAni();
-                    List<filePack> projectList = manager.listAll();
-                    manager.launchProject(projectList);
                     introMenu();
                     break;
                 case "1.1":
